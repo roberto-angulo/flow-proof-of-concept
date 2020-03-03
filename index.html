@@ -11,6 +11,7 @@
             display: grid;
             justify-content: center;
         }
+        
 
     </style>
 </head>
@@ -20,62 +21,62 @@
         <div class="row justify-content-center">
             <div class="col-10">
                 <form action="row" id="wrapper_input_fields">
-                    <div class="col-12 component-wrapper inputs-wrapper js-inputs-wrapper-active fade sr-only" id="A" data-wedding-url="#currentComponent=1">
+                    <div class="col-12 component-wrapper inputs-wrapper inputs-wrapper-active fade sr-only" id="A" data-wedding-url="#currentComponent=1">
                         <label>
                             <span class="d-block text-danger font-weight-bold">Component A</span>
 
-                            <input type="text" class="form-control" id="componentOne" required>
+                            <input type="text" class="form-control wd-input-field" value="" id="componentOne" required>
                         </label>
                         
-                        <p>
-                            <a href="#" class="btn btn-danger" onclick="stoppingNavigation();">Submit value</a>
-                        </p>
+                       <!--  <p> -->
+                            <a href="#currentComponent=2" class="btn btn-danger">Submit value</a>
+                        <!-- </p> -->
                     </div>
 
-                    <div class="col-12 component-wrapper inputs-wrapper fade sr-only" id="B" data-wedding-url="#">
+                    <div class="col-12 component-wrapper inputs-wrapper fade sr-only" id="B" data-wedding-url="#currentComponent=2">
                         <label>
                             <span class="d-block text-success font-weight-bold">Component B</span>
 
-                            <input type="text" class="form-control" required>
+                            <input type="text" class="form-control wd-input-field" value="" required>
                         </label>
                         
-                        <p>
-                            <a href="#" class="btn btn-success" onclick="stoppingNavigation();">Submit value</a>
-                        </p>
+                       <!--  <p> -->
+                            <a href="#currentComponent=3" class="btn btn-success">Submit value</a>
+                        <!-- </p> -->
                     </div>
 
                     <div class="col-12 component-wrapper inputs-wrapper fade sr-only" id="C" data-wedding-url="#currentComponent=3">
                         <label>
                             <span class="d-block text-info font-weight-bold">Component C</span>
 
-                            <input type="text" class="form-control" required>
+                            <input type="text" class="form-control wd-input-field" value="" required>
                         </label>
                         
-                        <p>
-                            <a href="#" class="btn btn-info" onclick="stoppingNavigation();">Submit value</a>
-                        </p>
+                       <!--  <p> -->
+                            <a href="#currentComponent=4" class="btn btn-info">Submit value</a>
+                        <!-- </p> -->
                     </div>
 
                     <div class="col-12 component-wrapper inputs-wrapper fade sr-only" id="D" data-wedding-url="#currentComponent=4">
                         <label>
                             <span class="d-block text-primary font-weight-bold">Component D</span>
 
-                            <input type="text" class="form-control" required>
+                            <input type="text" class="form-control wd-input-field" value="" required>
                         </label>
                         
-                        <p>
-                            <a href="#" class="btn btn-primary" onclick="stoppingNavigation();">Submit value</a>
-                        </p>
+                       <!--  <p> -->
+                            <a href="#" class="btn btn-primary">Submit value</a>
+                        <!-- </p> -->
                     </div>
                 </form>
             </div>
         </div>
     </div>
     
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script>
-
-         // prevent default
-         const stoppingNavigation = () => false;
 
         // function to display current component
         const showingElement = ( element ) => {
@@ -84,54 +85,83 @@
             && element.classList.remove( 'sr-only' ); element.classList.add( 'show' );
         }
 
-        const pushingCurrentHistoryState = ( historyObject, currentComponent ) => {
-            history.pushState( historyObject, '', currentComponent );
+        const removingElement = ( element ) => {
 
-            let currentStateComponent = history.state.currentComponent;
+            ( element.classList.contains( 'show' ) && ! element.classList.contains( 'sr-only' ) )
 
-            return currentStateComponent;
+                && element.classList.remove( 'show' ); element.classList.add( 'sr-only' );
         }
 
-        let initComponent = 1;
+        console.log( localStorage.getItem( 'myWeddingToolData' ) );
+        // hardcode hash when user get into this component for the first time
+        window.location = '#currentComponent=1';
 
-        let isDataOnLocalStorage = localStorage.getItem( 'weddingToolData' );
+        // show element corresponding bar url hash
+        let elementToShow = document.querySelector( '[data-wedding-url="#currentComponent=1"]' );
+        showingElement( elementToShow );
 
-        if( isDataOnLocalStorage === null ) {
+        // clicking button event
+        document.addEventListener( 'click', ( event ) => {
 
-            let currentComponent = `#currentComponent=${initComponent}`;
+            if( event.target.classList.contains( 'btn' ) ) {
 
-            // data to pass into history object
-            let initialHistoryObject = {
-                previousComponent: `#currentComponent=${initComponent-1}`,
-                currentComponent: currentComponent,
-                nextComponent: `#currentComponent=${initComponent+1}`
-            };
+                event.preventDefault();
 
-            // we pass data into history object and return the current element we'll display
-            const currentStateComponent = pushingCurrentHistoryState( initialHistoryObject, currentComponent );
+                let myBtn = event.target;
 
-            if( currentStateComponent ) {
-                    //Show element returned by history object data
-                    let currentComponentNode = document.querySelector( `[data-wedding-url="${currentStateComponent}"]` );
-                    showingElement( currentComponentNode );
+                console.log( myBtn.previousSibling );
 
-                    // store data on localstorage
-                    const buttonSubmit = document.getElementById( 'componentOne' );
+                // store on local storage
+                let hrefAttributeClickedButton = event.target.getAttribute( 'href' );
 
-                    buttonSubmit.addEventListener( 'click', ( event ) => {
+                window.location = hrefAttributeClickedButton;
 
-                    const dataFirstQuestionResponse = 'One question answered';
+                let componentToredirectTo = document.querySelector( `[data-wedding-url="${hrefAttributeClickedButton}"]` );
+                showingElement( componentToredirectTo );
 
-                        localStorage.setItem( 'weddingToolData', dataFirstQuestionResponse );
 
-                    } );
+                let elementToHide = event.target.closest( '.inputs-wrapper' );
 
+                removingElement( elementToHide );
+
+                // Get the existing data
+                let existing = localStorage.getItem('myWeddingToolData');
+
+                // If no existing data, create an array
+                // Otherwise, convert the localStorage string to an array
+                existing = existing ? existing.split(',') : [];
+
+                if( ! existing[hrefAttributeClickedButton] ) {
+                        
+                    // Add new data to localStorage Array
+                    existing.push( hrefAttributeClickedButton );
+
+                    // Save back to localStorage
+                    localStorage.setItem('myWeddingToolData', existing.toString());
+                }
             }
+        } );
 
+    window.addEventListener( 'hashchange', ( event ) => {
+        let currentHash = window.location.hash;
 
-        }
+        let elementToShow = document.querySelector( `[data-wedding-url="${currentHash}"]` );
 
-     
+        let inputsFields = document.getElementsByClassName( 'inputs-wrapper' );
+
+        Array.from( inputsFields ).map( ( value, index ) => {
+
+            let urlAttribute = value.getAttribute( 'data-wedding-url' )
+
+            if( currentHash != urlAttribute ) { 
+                removingElement( value );
+             }
+        } )
+        showingElement( elementToShow );
+
+    } );
+    
+
       
 
 
