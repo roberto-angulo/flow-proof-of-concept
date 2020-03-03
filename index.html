@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Document</title>
+
+    <style>
+        .inputs-wrapper {
+            display: grid;
+            justify-content: center;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container mt-5 pt-5">
+        <div class="row justify-content-center">
+            <div class="col-10">
+                <form action="row" id="wrapper_input_fields">
+                    <div class="col-12 component-wrapper inputs-wrapper js-inputs-wrapper-active fade sr-only" id="A" data-wedding-url="#currentComponent=1">
+                        <label>
+                            <span class="d-block text-danger font-weight-bold">Component A</span>
+
+                            <input type="text" class="form-control" id="componentOne" required>
+                        </label>
+                        
+                        <p>
+                            <a href="#" class="btn btn-danger" onclick="stoppingNavigation();">Submit value</a>
+                        </p>
+                    </div>
+
+                    <div class="col-12 component-wrapper inputs-wrapper fade sr-only" id="B" data-wedding-url="#">
+                        <label>
+                            <span class="d-block text-success font-weight-bold">Component B</span>
+
+                            <input type="text" class="form-control" required>
+                        </label>
+                        
+                        <p>
+                            <a href="#" class="btn btn-success" onclick="stoppingNavigation();">Submit value</a>
+                        </p>
+                    </div>
+
+                    <div class="col-12 component-wrapper inputs-wrapper fade sr-only" id="C" data-wedding-url="#currentComponent=3">
+                        <label>
+                            <span class="d-block text-info font-weight-bold">Component C</span>
+
+                            <input type="text" class="form-control" required>
+                        </label>
+                        
+                        <p>
+                            <a href="#" class="btn btn-info" onclick="stoppingNavigation();">Submit value</a>
+                        </p>
+                    </div>
+
+                    <div class="col-12 component-wrapper inputs-wrapper fade sr-only" id="D" data-wedding-url="#currentComponent=4">
+                        <label>
+                            <span class="d-block text-primary font-weight-bold">Component D</span>
+
+                            <input type="text" class="form-control" required>
+                        </label>
+                        
+                        <p>
+                            <a href="#" class="btn btn-primary" onclick="stoppingNavigation();">Submit value</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+
+         // prevent default
+         const stoppingNavigation = () => false;
+
+        // function to display current component
+        const showingElement = ( element ) => {
+            ( element.classList.contains( 'sr-only' ) && ! element.classList.contains( 'show' ) ) 
+
+            && element.classList.remove( 'sr-only' ); element.classList.add( 'show' );
+        }
+
+        const pushingCurrentHistoryState = ( historyObject, currentComponent ) => {
+            history.pushState( historyObject, '', currentComponent );
+
+            let currentStateComponent = history.state.currentComponent;
+
+            return currentStateComponent;
+        }
+
+        let initComponent = 1;
+
+        let isDataOnLocalStorage = localStorage.getItem( 'weddingToolData' );
+
+        if( isDataOnLocalStorage === null ) {
+
+            let currentComponent = `#currentComponent=${initComponent}`;
+
+            // data to pass into history object
+            let initialHistoryObject = {
+                previousComponent: `#currentComponent=${initComponent-1}`,
+                currentComponent: currentComponent,
+                nextComponent: `#currentComponent=${initComponent+1}`
+            };
+
+            // we pass data into history object and return the current element we'll display
+            const currentStateComponent = pushingCurrentHistoryState( initialHistoryObject, currentComponent );
+
+            if( currentStateComponent ) {
+                    //Show element returned by history object data
+                    let currentComponentNode = document.querySelector( `[data-wedding-url="${currentStateComponent}"]` );
+                    showingElement( currentComponentNode );
+
+                    // store data on localstorage
+                    const buttonSubmit = document.getElementById( 'componentOne' );
+
+                    buttonSubmit.addEventListener( 'click', ( event ) => {
+
+                    const dataFirstQuestionResponse = 'One question answered';
+
+                        localStorage.setItem( 'weddingToolData', dataFirstQuestionResponse );
+
+                    } );
+
+            }
+
+
+        }
+
+     
+      
+
+
+
+
+
+
+
+
+
+
+        
+
+        //console.log( currentStateComponent );
+
+
+
+        // Set this url by default
+        
+
+
+       
+
+        //console.log( initialHistoryObject );
+
+
+       
+
+        // Triggered when the url changes
+        //window.addEventListener( 'popstate', () => {
+
+            // Check the current component, regarding the url hash
+          //  let elementToShow = window.location.hash;
+
+            // now we display that element
+            //elementToShow = document.querySelector( `[data-wedding-url="${elementToShow}"]` );
+            //showingElement( elementToShow );
+
+            //console.log( history );
+
+        //} );
+
+
+
+
+       
+        /*
+        
+        let element = document.querySelector( '.js-inputs-wrapper-active' );
+
+        let currentLocationUrl = window.location;
+
+
+        const showingElement = ( element ) => {
+
+            ( element.classList.contains( 'sr-only' ) && ! element.classList.contains( 'show' ) ) 
+
+                && element.classList.remove( 'sr-only' ); element.classList.add( 'show' );
+        }
+
+        const removingElement = ( element ) => {
+
+            ( element.classList.contains( 'show' ) && ! element.classList.contains( 'sr-only' ) )
+
+                && element.classList.remove( 'show' ); element.classList.add( 'sr-only' );
+        }
+
+        const componentsCollection = {
+            A: {
+                url: `${currentLocationUrl}currentComponent=1`
+            },
+            B: {
+                url: `${currentLocationUrl}currentComponent=2`
+            },
+            C: {
+                url: `${currentLocationUrl}currentComponent=3`
+            },
+            D: {
+                url: `${currentLocationUrl}currentComponent=3`
+            }
+        };
+
+        
+        let hashUrl = window.location.hash;
+
+        const elementToShow = document.querySelector( `[data-wedding-url="${hashUrl}"]` );
+
+        showingElement( elementToShow );
+
+        document.querySelector( '#wrapper_input_fields' ).addEventListener( 'click', function( event ) {
+
+            if( event.target.classList.contains( 'btn' ) ) {
+
+
+                let urlLocationNextStep = event.target.getAttribute( 'href' );
+
+                // Passing new location to url bar
+                //window.location = urlLocationNextStep;
+
+                const testObject = {
+                    entry: urlLocationNextStep
+                }
+
+                let newLocation = `${currentLocationUrl.origin}/${urlLocationNextStep}`;
+
+                let componentContainer = event.target.closest( `[data-wedding-url="${urlLocationNextStep}"]` );
+
+                history.pushState( testObject, '', urlLocationNextStep );
+
+                const historyEntryState = history.state.entry;
+
+                console.log( history );
+
+                // if the current url is the one that was on the previous component button.
+                // we hide that previous component
+                //if( currentLocationUrl.href == newLocation ) {
+                    //console.log( componentContainer );
+
+                    //removingElement( componentContainer );
+
+                    // Show next element
+                    //let nextElementContainer = componentContainer.nextElementSibling;
+
+                    //showingElement( nextElementContainer );
+
+                //}
+
+                //console.log( currentLocationUrl.hash );
+
+                //console.log( urlLocationNextStep );
+                
+
+
+
+                //const urlCollection = Object.values( componentsCollection );
+
+
+                /*
+                urlCollection.map( ( value, index ) => {
+
+                    if( history.state.entry == value.url ) {
+
+                        console.log( 'it is the same' );
+
+                        //showingElement( value.url );
+
+                    }
+
+                } );
+  
+                 */
+               // }
+
+
+    //} );
+
+        //} );
+
+    </script>
+</body>
+</html>
